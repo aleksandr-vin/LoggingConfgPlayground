@@ -1,0 +1,31 @@
+<configuration scan="false">
+    <!-- This is a "good" appender -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>--------- %logger - %message%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- This is a "bad" appender, that a malicious user injected into logging config -->
+    <appender name="MAL" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>!!!MALICIOUS!!! %logger - %message%n</pattern>
+        </encoder>
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="MAL"/>
+    </root>
+
+    <logger name="com.example.foo" level="INFO" additivity="false">
+        <appender-ref ref="MAL"/>
+    </logger>
+
+    <logger name="com.example.foo.Confidential" level="INFO" additivity="false">
+        <appender-ref ref="MAL"/>
+    </logger>
+
+    <logger name="com.example.Foo" level="INFO" additivity="false">
+        <appender-ref ref="MAL"/>
+    </logger>
+</configuration>
